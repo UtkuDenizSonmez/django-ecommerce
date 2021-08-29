@@ -1,0 +1,67 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="{% url 'product:home' %}">UDS</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Women
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <a class="dropdown-item" href="{% url 'product:search_category' category_slug='trousers' gender='F' %}">Women Trousers</a>
+                <a class="dropdown-item" href="{% url 'product:search_category' category_slug='shoe' gender='F' %}">Women Shoes</a>
+                <a class="dropdown-item" href="{% url 'product:search_category' category_slug='t-shirt' gender='F' %}">T-Shirt</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuMen" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Men</a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuMen">
+                    <a class="dropdown-item" href="{% url 'product:search_category' category_slug='trousers' gender='M' %}">Men Trousers</a>
+                    <a class="dropdown-item" href="{% url 'product:search_category' category_slug='shoe' gender='M' %}">Men Shoes</a>
+                    <a class="dropdown-item" href="{% url 'product:search_category' category_slug='t-shirt' gender='M' %}">T-Shirt</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'product:search_category' category_slug='watch' gender='M' %}">Watch</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+                <a id="basket-quantity" class="nav-link" href="{% url 'basket:cart_items' %}" >
+                {% with total_qty=basket|length %}
+                    {% if total_qty > 0 %}
+                        {{ total_qty }}
+                    {% else %}
+                        0
+                    {% endif %}
+                {% endwith %}
+                <i class="fas fa-shopping-cart"></i></a>
+            </li>
+        {% if user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'user:logout' %}">Logout</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuMen" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user-alt"></i>  Profile</a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuMen">
+                    <a class="dropdown-item" href="{% url 'user:edit_profile' %}">Edit Profile</a>
+                    <a class="dropdown-item" href="{% url 'user:dashboard' %}">Orders</a>
+                </div>
+            </li>
+        {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'user:login' %}">Login</a>
+            </li>
+        {% endif %}
+        </ul>
+    </div>
+</nav>
+<script type="text/javascript">
+    window.addEventListener("scroll", function() {
+        var header = document.querySelector("nav");
+        header.classList.toggle("sticky", window.scrollY > 0);
+    })
+</script>

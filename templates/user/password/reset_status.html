@@ -1,0 +1,24 @@
+{% extends '../../base.html' %}
+{% load static %}
+{% block title %} Confirmation Page {% endblock %}
+{% block content %}
+    <section class="cart-session">
+        <div class="container">
+            <div class="mt-5 mb-5">
+
+            </div>
+            <div style="padding: 20%">
+                {% if "email" in request.get_full_path %}
+                    <h2>Password reset request success!</h2>
+                    <br>
+                    <p>Check your email for instructions.</p>
+                {% endif %}
+                {% if "complete" in request.get_full_path %}
+                    <h2>Password has changed successfully!</h2>
+                    <br>
+                    Click here to <a class="btn btn-primary btn-lg" href="{% url 'user:login' %}">Login</a> !
+                {% endif %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

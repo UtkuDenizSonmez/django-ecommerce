@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Cart {% endblock title %}
+{% block content %}
+<section id="cart-session">
+    <div class="container">
+        <div class="row">
+        {% with total_qty=basket|length %}
+            {% if total_qty == 0 %}
+                <h3 class="empty-cart">Your Cart is currently Empty <br><br><a href="{% url 'product:home' %}">Go shopping</a></h3>
+            {% else %}
+                <div class="basket-text">
+                    <h2 class="">Basket</h2>
+                    <hr>
+                    <br>
+                </div>
+                <table class="table cart-table">
+                    <thead class="thead-light">
+                    <tr>
+                      <th scope="col">Product</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Price</th>
+                      <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for items in basket %}
+                        {% with product=items.product %}
+                            <div class="table-item" data-index="{{ product.id }}">
+                                <tr>
+                                    <td class="align-middle"><img class="cart-img" src="{{ product.image.url }}"></td>
+                                    <td class="align-middle">{{ product.title }}</td>
+                                    <td class="align-middle price text-success">$ {{ product.price }}</td>
+                                    <td class="align-middle"><button type="button" class="remove-item-button btn btn-danger" data-index="{{ product.id }}" data-url="{% url 'basket:remove_item_from_basket' %}">Remove</button></td>
+                                </tr>
+                                <form>
+                                    <input type="hidden" id="csrfmiddlewaretoken" value="{{ csrf_token }}">
+                                </form>
+                            </div>
+                        {% endwith %}
+                    {% endfor %}
+                    <tr class="table-primary">
+                      <td></td>
+                      <td></td>
+                      <td>Total: <span class="price text-success"> ${{ basket.total_price|floatformat:2 }} </span></td>
+                      <td><a class="btn btn-primary" href="{% url 'payment:payment_details' %}">Checkout</a></td>
+                    </tr>
+                    </tbody>
+                  </table>
+            {% endif %}
+        {% endwith %}
+        </div>
+    </div>
+</section>
+{% endblock content %}
