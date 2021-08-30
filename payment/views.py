@@ -10,11 +10,6 @@ from basket.basket import Basket
 from orders.views import payment_confirmation
 import stripe
 import os
-import environ
-
-env = environ.Env()
-# reading .env file
-environ.Env.read_env()
 
 # Create your views here.
 
@@ -26,7 +21,7 @@ def payment_details(request):
     total = total.replace(".", "")
     total = int(total)
 
-    stripe.api_key = env("STRIPE_SECRET_KEY")
+    stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
     intent = stripe.PaymentIntent.create(
         amount=total,
         currency='USD',
