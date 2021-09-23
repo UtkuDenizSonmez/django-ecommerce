@@ -1,15 +1,22 @@
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
-from .forms import RegisterForm, EditForm, LoginForm
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
+from django.contrib import messages
+
+from .forms import RegisterForm, EditForm, LoginForm, UserAddressForm
+
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_text
-from .token import account_activation_token
 from django.contrib.auth.decorators import login_required
-from .models import UserBase
 from django.contrib.auth import login, logout
+
+from .token import account_activation_token
+from .models import UserBase, Address
+
 from orders.views import user_orders
+from product.models import Product
 # Create your views here.
 
 
@@ -103,5 +110,74 @@ def delete_profile(request):
     user.save()
     logout(request)
     return redirect("user:delete_confirmation")
+
+
+# Addresses
+@login_required
+def view_addresses(request):
+    addresses = Address.objects.filter(customer=request.user)
+    return render(request, "user/address/addresses.html", {"addresses": addresses})
+
+
+@login_required
+def add_address(request):
+    if request.method == "POST":
+        form = UserAddressForm(data=request.POST)
+        if form.is_valid():
+            form = form.save(commit=False)
+            form.customer = request.user
+            form.save()
+            return HttpResponseRedirect(reverse("user:addresses"))
+    else:
+        form = UserAddressForm()
+    return render(request, "user/address/edit-address.html", {"form": form})
+
+
+@login_required
+def edit_address(request, public_id):
+    if request.method == "POST":
+        address = Address.objects.get(customer=request.user, pk=public_id)
+        form = UserAddressForm(instance=address, data=request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse("user:addresses"))
+    else:
+        address = Address.objects.get(customer=request.user, pk=public_id)
+        form = UserAddressForm(instance=address)
+    return render(request, "user/address/edit-address.html", {"form": form})
+
+
+@login_required
+def delete_address(request, public_id):
+    address = Address.objects.get(customer=request.user, pk=public_id)
+    address.delete()
+    return redirect("user:addresses")
+
+
+@login_required
+def set_default(request, public_id):
+    Address.objects.filter(customer=request.user, default=True).update(default=False)
+    Address.objects.filter(customer=request.user, pk=public_id).update(default=True)
+    return redirect("user:addresses")
+
+
+@login_required
+def wishlist(request):
+    products = Product.objects.filter(user_wishlist=request.user)
+    return render(request, "user/user-wishlist.html", {"wishlist": products})
+
+
+@login_required
+def add_to_wishlist(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    if product.user_wishlist.filter(id=request.user.id).exists():
+        product.user_wishlist.remove(request.user)
+        messages.error(request, "Removed " + product.title + " from your Wishlist")
+    else:
+        product.user_wishlist.add(request.user)
+        messages.success(request, "Added " + product.title + " to your Wishlist")
+    return HttpResponseRedirect(request.META["HTTP_REFERER"])
+
+
 
 

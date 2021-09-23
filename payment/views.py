@@ -21,7 +21,7 @@ def payment_details(request):
     total = total.replace(".", "")
     total = int(total)
 
-    stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
+    stripe.api_key = "sk_test_51JPTEyIpP9vN5HSd8SHoJBnPUEuiv0wMKVQxVsdCm5rYiw7koBOxsKYjvy9rw5G5OEYReooPOKuPbzbwF3S3smMG009DeGJv52"
     intent = stripe.PaymentIntent.create(
         amount=total,
         currency='USD',

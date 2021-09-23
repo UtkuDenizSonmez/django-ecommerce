@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm
 
-from .models import UserBase
+from .models import UserBase, Address
 from django import forms
 
 
@@ -107,8 +107,8 @@ class EditForm(forms.ModelForm):
             "id": "form-firstName",
         })
     )
-    phone = forms.CharField(
-        label="Phone",
+    mobile = forms.CharField(
+        label="Phone Number",
         max_length=50,
         widget=forms.TextInput(attrs={
             "class": "form-control",
@@ -116,52 +116,17 @@ class EditForm(forms.ModelForm):
             "id": "form-phone"
         })
     )
-    post_code = forms.CharField(
-        label="Post Code",
-        max_length=50,
-        widget=forms.TextInput(attrs={
-            "class": "form-control",
-            "placeholder": "Post Code",
-            "id": "form-postCode"
-        })
-    )
-    address1 = forms.CharField(
-        label="Address Line 1",
-        max_length=50,
-        widget=forms.TextInput(attrs={
-            "class": "form-control",
-            "placeholder": "Address Line 1",
-            "id": "form-address1"
-        })
-    )
-    address2 = forms.CharField(
-        label="Address Line 2",
-        max_length=50,
-        widget=forms.TextInput(attrs={
-            "class": "form-control",
-            "placeholder": "Address Line 2",
-            "id": "form-address2"
-        })
-    )
-    city = forms.CharField(
-        label="City",
-        max_length=50,
-        widget=forms.TextInput(attrs={
-            "class": "form-control",
-            "placeholder": "City",
-            "id": "form-city"
-        })
-    )
 
     class Meta:
         model = UserBase
-        fields = ("username", "email", "first_name", "phone", "post_code", "address1", "address2", "city")
+        fields = ("username", "email", "first_name", "mobile")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["username"].required = True
         self.fields["email"].required = True
         self.fields["first_name"].required = True
+        self.fields["mobile"].required = True
 
 
 class PwdResetForm(PasswordResetForm):
@@ -196,4 +161,35 @@ class PwdResetConfirmForm(SetPasswordForm):
             "placeholder": "Confirm password",
         })
     )
+
+
+class UserAddressForm(forms.ModelForm):
+    class Meta:
+        model = Address
+        fields = ["full_name", "phone", "address_line", "address_line2", "postcode", "town_base"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["full_name"].widget.attrs.update(
+            {"class": "form-control mb-2 account-form", "placeholder": "Full Name"}
+        )
+        self.fields["phone"].widget.attrs.update(
+            {"class": "form-control mb-2 account-form", "placeholder": "Phone Number"}
+        )
+        self.fields["address_line"].widget.attrs.update(
+            {"class": "form-control mb-2 account-form", "placeholder": "Address Line 1"}
+        )
+        self.fields["address_line2"].widget.attrs.update(
+            {"class": "form-control mb-2 account-form", "placeholder": "Address Line 2"}
+        )
+        self.fields["postcode"].widget.attrs.update(
+            {"class": "form-control mb-2 account-form", "placeholder": "Post Code"}
+        )
+        self.fields["town_base"].widget.attrs.update(
+            {"class": "form-control mb-2 account-form", "placeholder": "Town City"}
+        )
+
+
+
+
 

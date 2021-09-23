@@ -12,21 +12,20 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
-import django_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 from django.urls import reverse_lazy
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'cg#şp$g+sdfsdfjğş9tax!#asfdsdf3ğcup@1şüüdsfüp$8obtş2_+&k3q+ğpmu)5%asj6ğğyjpkag')
+SECRET_KEY = "django-insecure-!xp)cng@%t(j$1p)+h_-to5eox@p=)@1j0s+f*1zjtle*k-@7@"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["yourdomain.com", "127.0.0.1", "localhost"]
 
@@ -44,6 +43,7 @@ INSTALLED_APPS = [
     'user',
     'payment',
     'orders',
+    'mptt',
 ]
 
 MIDDLEWARE = [
@@ -151,11 +151,9 @@ STRIPE_ENDPOINT_SECRET = "whsec_cjmSKnrjuoOlezEGEU0LIEvVmQJX8Pv9"
 # Basket session
 BASKET_SESSION_ID = "basket"
 
-# Heroku: Update database configuration from $DATABASE_URL.
-import dj_database_url
+# # Heroku: Update database configuration from $DATABASE_URL.
+# import dj_database_url
+#
+# db_from_env = dj_database_url.config(conn_max_age=500)
+# DATABASES['default'].update(db_from_env)
 
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(db_from_env)
-
-
-django_heroku.settings(locals())

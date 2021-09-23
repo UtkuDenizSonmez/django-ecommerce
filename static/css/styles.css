@@ -115,6 +115,10 @@ nav.sticky a {
     margin-bottom: 7% !important;
 }
 
+.wrapper {
+    display: flex;
+}
+
 .flash-message, .price-text {
     font-weight: 3.5rem;
     color: #232323;
@@ -291,7 +295,7 @@ nav.sticky a {
 }
 
 /*  ITEM DETAILS PAGE  */
-#main-image {
+#main-image, .wrapper {
     padding-right: 8rem;
     padding-top: 2rem;
 }
@@ -413,5 +417,42 @@ label.radio input:checked+span {
 
 .page-num:hover {
     color: #000000;
+}
+
+/* REMOVE FROM WISHLIST BUTTON */
+
+.myButton {
+	box-shadow:inset -35px -41px 4px -31px #80221f;
+	background:linear-gradient(to bottom, #e4685d 5%, #9c0c05 100%);
+	background-color:#e4685d;
+	border-radius:42px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:15px;
+	font-style:italic;
+	padding:11px 76px;
+	text-decoration:none;
+	text-shadow:-1px 0px 0px #b23e35;
+}
+.myButton:hover {
+	background:linear-gradient(to bottom, #9c0c05 5%, #e4685d 100%);
+	background-color:#9c0c05;
+}
+.myButton:active {
+	position:relative;
+	top:1px;
+}
+
+.myButton:hover {
+    color: #FFFFFF;
+}
+
+/* MESSAGES */
+
+.messages {
+    position: relative;
+    top: 6rem;
 }
 

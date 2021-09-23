@@ -20,7 +20,7 @@ class Basket:
             Making the basket iterable.
         """
         product_ids = self.basket.keys()
-        products = Product.products.filter(id__in=product_ids)
+        products = Product.objects.filter(id__in=product_ids)
         basket = self.basket.copy()
 
         for product in products:
@@ -42,7 +42,7 @@ class Basket:
         """
         product_id = product.id
         if product_id not in self.basket:
-            self.basket[product_id] = {"price": float(product.price), "quantity": quantity}
+            self.basket[product_id] = {"price": float(product.regular_price), "quantity": quantity}
         else:
             self.basket[product_id]["quantity"] = quantity
         self.save()

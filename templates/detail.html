@@ -3,6 +3,17 @@
 {% block title %} {{ requested_item.title }} {% endblock %}
 {% block content %}
     <div class="container mt-5 mb-5">
+    <div class="container">
+        <div class="messages">
+            {% if messages %}
+                <div class="alert alert-warning" alert-{{ message.tags }}" role="alert">
+                    {% for message in messages %}
+                        {{ message|safe }} - <a href="{% url 'user:wishlist' %}" class="alert-link">Your WishList</a>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
     <div class="row d-flex justify-content-center selected-item">
         <div class="col-md-10">
             <div class="card">
@@ -10,38 +21,51 @@
                     <div class="col-md-6">
                         <div class="images p-3">
                             <div class="text-center p-4">
-                                <img id="main-image" src="{{ requested_item.image.url }}" width="554" />
+                                {% for image in requested_item.product_image.all %}
+                                    {% if image.is_feature %}
+                                        <img class="detail-image" id="main-image" src="{{ image.image.url }}" width="500" alt="{{ image.image.alt_text }}" />
+                                    {% endif %}
+                                {% endfor %}
                             </div>
-                            <div class="thumbnail text-center">
-                                <img onclick="change_image(this)" src="" width="50">
-                                <img onclick="change_image(this)" src="" width="50">
-                            </div>
+                        <div class="row">
+                            {% for image in requested_item.product_image.all %}
+                                {% if not image.is_feature %}
+                                    <div class="col-3">
+                                        <img class="wrapper" src="{{ image.image.url }}" width="234" height="100" alt="{{ image.image.alt_text }}" />
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="product p-4">
+                        <div class="product p-4" style="height: 584px;">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="d-flex align-items-center">
                                     <i class="fas fa-long-arrow-alt-left"></i>
                                     <a href="{% url 'product:home' %}" class="ml-1" >Back</a>
                                 </div>
-                                <i class="far fa-heart"></i>
+                                <a href="{% url 'user:add_to_wishlist' requested_item.id %}"><i class="far fa-heart"></i></a>
                             </div>
                             <div class="mt-4 mb-3">
                                 <span class="text-uppercase text-muted brand">{{ requested_item.category }}</span>
                                 <h5 class="text-uppercase"> {{ requested_item.title }} </h5>
                                 <hr>
                                 <div class="price d-flex flex-row align-items-center">
-                                    <span class="act-price text-success">${{ requested_item.price }}</span>
+                                    <span class="act-price text-success">${{ requested_item.regular_price }}</span>
                                 </div>
                             </div>
                             <p class="about text-muted">{{ requested_item.description }}</p>
                             <hr>
                             <div class="cart mt-4 align-items-center">
-                                <button type="button" value="{{ requested_item.id }}" data-url="{% url 'basket:add_item_to_basket' %}" class="btn btn-danger text-uppercase mr-2 px-4 add-item-button"><i class="fas fa-shopping-cart"></i>Add to cart</button>
-                                <form>
-                                   <input type="hidden" id="csrfmiddlewaretoken" value="{{ csrf_token }}">
-                                </form>
+                                {% if requested_item.quantity >= 1 %}
+                                    <button type="button" value="{{ requested_item.id }}" data-url="{% url 'basket:add_item_to_basket' %}" class="btn btn-danger text-uppercase mr-2 px-4 add-item-button"><i class="fas fa-shopping-cart"></i>Add to cart</button>
+                                    <form>
+                                       <input type="hidden" id="csrfmiddlewaretoken" value="{{ csrf_token }}">
+                                    </form>
+                                {% else %}
+                                    <button class="btn btn-danger mt-3" disabled>Not on Stock</button>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -50,4 +74,6 @@
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="{% static 'js/detail.js' %}" type="text/javascript"></script>
 {% endblock %}

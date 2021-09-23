@@ -41,14 +41,12 @@
                 <i class="fas fa-shopping-cart"></i></a>
             </li>
         {% if user.is_authenticated %}
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'user:logout' %}">Logout</a>
-            </li>
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuMen" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user-alt"></i>  Profile</a>
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuMen" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user-alt"></i> {{ user.username|title }}</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuMen">
+                    <a class="dropdown-item" href="{% url 'user:dashboard' %}">Account</a>
                     <a class="dropdown-item" href="{% url 'user:edit_profile' %}">Edit Profile</a>
-                    <a class="dropdown-item" href="{% url 'user:dashboard' %}">Orders</a>
+                    <a class="dropdown-item" href="{% url 'user:logout' %}">Logout</a>
                 </div>
             </li>
         {% else %}

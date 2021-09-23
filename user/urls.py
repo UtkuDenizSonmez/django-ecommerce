@@ -17,6 +17,12 @@ urlpatterns = [
     path("logout/", auth_views.LogoutView.as_view(next_page="/user/login/"), name="logout"),
     # Dashboard(orders)
     path("dashboard/", views.dashboard, name="dashboard"),
+    # Address
+    path("addresses/", views.view_addresses, name="addresses"),
+    path("add_address/", views.add_address, name="add_address"),
+    path("addresses/edit/<slug:public_id>", views.edit_address, name="edit_address"),
+    path("addresses/delete/<slug:public_id>", views.delete_address, name="delete_address"),
+    path("addresses/set_default/<slug:public_id>", views.set_default, name="set_default"),
     # Editing Profile
     path("profile/edit/", views.edit_profile, name="edit_profile"),
     path("profile/delete/", views.delete_profile, name="delete_profile"),
@@ -39,5 +45,7 @@ urlpatterns = [
          TemplateView.as_view(template_name="user/password/reset_status.html"), name="password_reset_done"),
     path("password_reset_complete/",
          TemplateView.as_view(template_name="user/password/reset_status.html"), name="password_reset_complete"),
-
+    # Wishlist
+    path("wishlist/", views.wishlist, name="wishlist"),
+    path("wishlist/add_to_wishlist/<int:product_id>", views.add_to_wishlist, name="add_to_wishlist"),
 ]

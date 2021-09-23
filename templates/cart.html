@@ -28,9 +28,13 @@
                         {% with product=items.product %}
                             <div class="table-item" data-index="{{ product.id }}">
                                 <tr>
-                                    <td class="align-middle"><img class="cart-img" src="{{ product.image.url }}"></td>
+                                    {% for image in product.product_image.all %}
+                                        {% if image.is_feature %}
+                                            <td class="align-middle"><img class="cart-img" src="{{ image.image.url }}" alt="{{ image.image.alt_text }}"></td>
+                                        {% endif %}
+                                    {% endfor %}
                                     <td class="align-middle">{{ product.title }}</td>
-                                    <td class="align-middle price text-success">$ {{ product.price }}</td>
+                                    <td class="align-middle price text-success">$ {{ product.regular_price }}</td>
                                     <td class="align-middle"><button type="button" class="remove-item-button btn btn-danger" data-index="{{ product.id }}" data-url="{% url 'basket:remove_item_from_basket' %}">Remove</button></td>
                                 </tr>
                                 <form>
